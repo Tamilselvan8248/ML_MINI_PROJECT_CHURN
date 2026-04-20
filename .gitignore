@@ -23,6 +23,9 @@ data/*.pkl
 *.pkl
 *.joblib
 
+# Generated graphs (created at runtime)
+static/graphs/
+
 # IDE
 .vscode/
 .idea/
