@@ -1,0 +1,114 @@
+name: ChurnGuard AI – CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # ─────────────────────────────────────────
+  # JOB 1 – Lint & Test
+  # ─────────────────────────────────────────
+  test:
+    name: 🧪 Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 pytest
+
+      - name: Lint with flake8
+        run: |
+          # Stop build on syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Warn on style issues (don't fail)
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+
+      - name: Run import sanity check
+        run: |
+          python -c "import app; print('✅ app.py imports OK')"
+          python -c "import ml_model; print('✅ ml_model.py imports OK')"
+
+  # ─────────────────────────────────────────
+  # JOB 2 – Build & Package
+  # ─────────────────────────────────────────
+  build:
+    name: 🏗️ Build & Package
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify project structure
+        run: |
+          echo "📁 Project structure:"
+          find . -type f -name "*.py" | head -20
+          echo "📄 Templates:"
+          ls templates/
+          echo "🎨 Static files:"
+          ls static/ || echo "No static folder"
+
+      - name: Create artifact bundle
+        run: |
+          mkdir -p release
+          cp app.py ml_model.py requirements.txt release/
+          cp -r templates/ release/templates/
+          cp -r static/ release/static/ 2>/dev/null || true
+          echo "✅ Bundle created"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: churnguard-ai-build
+          path: release/
+          retention-days: 7
+
+  # ─────────────────────────────────────────
+  # JOB 3 – Deploy Summary
+  # ─────────────────────────────────────────
+  deploy-info:
+    name: 🚀 Deploy Info
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Deployment summary
+        run: |
+          echo "========================================="
+          echo "  ✅ ChurnGuard AI – Pipeline Passed!"
+          echo "========================================="
+          echo "  Branch  : ${{ github.ref_name }}"
+          echo "  Commit  : ${{ github.sha }}"
+          echo "  Author  : ${{ github.actor }}"
+          echo "  Run ID  : ${{ github.run_id }}"
+          echo "========================================="
+          echo "  📦 Build artifact uploaded."
+          echo "  🔗 Ready for deployment to your server."
+          echo "========================================="
