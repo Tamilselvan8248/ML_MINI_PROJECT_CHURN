@@ -11,7 +11,7 @@ jobs:
   # JOB 1 – Lint & Test
   # ─────────────────────────────────────────
   test:
-    name: 🧪 Lint & Test
+    name:  Lint & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -46,7 +46,7 @@ jobs:
   # JOB 2 – Build & Package
   # ─────────────────────────────────────────
   build:
-    name: 🏗️ Build & Package
+    name:  Build & Package
     runs-on: ubuntu-latest
     needs: test
 
@@ -93,7 +93,7 @@ jobs:
   # JOB 3 – Deploy Summary
   # ─────────────────────────────────────────
   deploy-info:
-    name: 🚀 Deploy Info
+    name:  Deploy Info
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
