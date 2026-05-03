@@ -15,11 +15,9 @@ env/
 .venv/
 .env
 
-# Flask / ML data
+# Flask / ML
 instance/
 *.db
-data/*.csv
-data/*.pkl
 *.pkl
 *.joblib
 
@@ -36,3 +34,4 @@ Thumbs.db
 
 # Logs
 *.log
+app_log.txt
