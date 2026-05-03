@@ -7,3 +7,4 @@ seaborn
 shap
 fpdf2
 gunicorn
+supabase

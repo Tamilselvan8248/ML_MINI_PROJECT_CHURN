@@ -5,6 +5,7 @@ from ml_model import (preprocess, train_test_split, train_all_models,
                       evaluate_models, predict_churn_model, generate_graphs,
                       generate_insights, generate_roc_curves, generate_shap_plot,
                       generate_customer_segments)
+from db import save_analysis, save_predictions, get_recent_analyses, get_predictions
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'churnguard_dev_secret')
@@ -101,6 +102,11 @@ def upload():
             'all_model_preds_json': json.dumps(all_model_preds),
             'segments_json':    json.dumps(segments),
         }
+        # ── Persist to Supabase ──────────────────────────
+        sid = _sid()
+        save_analysis(sid, _store[sid])
+        save_predictions(sid, best_preds)
+
         return redirect(url_for('dashboard'))
 
     except Exception as e:
@@ -135,6 +141,20 @@ def api_predict():
         return jsonify({'status': 'ok', 'note': 'Use /upload first, then query /api/predict with a customer JSON row.', 'sample_input': payload})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/history')
+def api_history():
+    """Returns last 10 analyses stored in Supabase."""
+    rows = get_recent_analyses(limit=10)
+    return jsonify({'analyses': rows})
+
+
+@app.route('/api/history/<session_id>/predictions')
+def api_history_predictions(session_id):
+    """Returns predictions for a past session from Supabase."""
+    rows = get_predictions(session_id)
+    return jsonify({'session_id': session_id, 'predictions': rows, 'count': len(rows)})
 
 
 @app.route('/api/summary')
