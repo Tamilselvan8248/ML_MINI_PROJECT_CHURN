@@ -1,6 +1,12 @@
 import os
 from supabase import create_client, Client
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv not required in production (Render sets env vars directly)
+
 SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://yulygbawzddqamwmjnjd.supabase.co')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
 

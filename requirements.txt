@@ -8,3 +8,4 @@ shap
 fpdf2
 gunicorn
 supabase
+python-dotenv

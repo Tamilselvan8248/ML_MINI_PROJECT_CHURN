@@ -13,7 +13,10 @@ build/
 venv/
 env/
 .venv/
+
+# Environment secrets — NEVER commit
 .env
+.env.*
 
 # Flask / ML
 instance/
