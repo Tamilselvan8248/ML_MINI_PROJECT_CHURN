@@ -44,5 +44,7 @@ ALTER TABLE analyses    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE predictions ENABLE ROW LEVEL SECURITY;
 
 -- Allow all operations via service role (used by backend)
+DROP POLICY IF EXISTS "service_all_analyses"    ON analyses;
+DROP POLICY IF EXISTS "service_all_predictions" ON predictions;
 CREATE POLICY "service_all_analyses"    ON analyses    FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "service_all_predictions" ON predictions FOR ALL USING (true) WITH CHECK (true);
