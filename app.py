@@ -264,4 +264,6 @@ def _calc_business_impact(predictions):
 
 
 if __name__ == '__main__':
-    app.run(debug=os.environ.get('DEBUG', 'false').lower() == 'true')
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('DEBUG', 'false').lower() == 'true'
+    app.run(host='0.0.0.0', port=port, debug=debug)

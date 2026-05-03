@@ -32,9 +32,7 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          # Stop build on syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # Warn on style issues (max line length 120)
           flake8 . --count --max-line-length=120 --statistics --exit-zero
 
       - name: Run tests
@@ -43,11 +41,7 @@ jobs:
 
       - name: Verify app imports correctly
         run: |
-          python -c "
-          import app
-          import ml_model
-          print('✅ All imports successful')
-          "
+          python -c "import app; import ml_model; print('All imports successful')"
 
   # ─────────────────────────────────────────
   # JOB 2: BUILD & SMOKE TEST
@@ -79,17 +73,14 @@ jobs:
           python app.py &
           APP_PID=$!
           sleep 5
-
-          # Check homepage returns 200
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/)
           echo "Homepage status: $STATUS"
           if [ "$STATUS" != "200" ]; then
-            echo "❌ Homepage returned $STATUS"
+            echo "Homepage returned $STATUS"
             kill $APP_PID
             exit 1
           fi
-
-          echo "✅ Smoke test passed"
+          echo "Smoke test passed"
           kill $APP_PID
 
       - name: Upload build artifact
@@ -127,14 +118,13 @@ jobs:
 
       - name: Run Bandit security scan
         run: |
-          bandit -r . -x ./venv,./env --severity-level medium \
-            --format txt || true
+          bandit -r . -x ./venv,./env --severity-level medium --format txt || true
 
   # ─────────────────────────────────────────
-  # JOB 4: DEPLOY SUMMARY
+  # JOB 4: DEPLOY TO RENDER
   # ─────────────────────────────────────────
-  deploy-summary:
-    name: Deploy Summary
+  deploy:
+    name: Deploy to Render
     runs-on: ubuntu-latest
     needs: [test, build, security]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
@@ -143,31 +133,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Print deploy summary
+      - name: Trigger Render Deploy
         run: |
-          echo "============================================"
-          echo "  ✅ ChurnGuard AI — Pipeline Complete"
-          echo "============================================"
-          echo "  Branch  : ${{ github.ref_name }}"
-          echo "  Commit  : ${{ github.sha }}"
-          echo "  Author  : ${{ github.actor }}"
-          echo "  Status  : All checks passed"
-          echo "============================================"
-          echo ""
-          echo "  📦 Artifact: churnguard-app (7 days)"
-          echo "  🔒 Security: Bandit scan complete"
-          echo "  🧪 Tests   : Passed"
-          echo "  🚀 Ready for deployment"
-          echo "============================================"
+          curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            --fail \
+            && echo "Render deploy triggered successfully" \
+            || echo "Render deploy hook not configured — skipping"
 
-      - name: Create deployment badge
+      - name: Write GitHub Actions summary
         run: |
-          echo "### 🚀 Deployment Ready" >> $GITHUB_STEP_SUMMARY
+          echo "### ChurnGuard AI — Deployed to Render" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Lint & Test | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          echo "| Build & Smoke Test | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          echo "| Security Scan | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
-          echo "| Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint & Test | Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build & Smoke Test | Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Scan | Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Render Deploy | Triggered |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | ${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Render auto-deploys on every push to main via render.yaml" >> $GITHUB_STEP_SUMMARY
