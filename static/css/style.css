@@ -628,10 +628,160 @@ h1,h2,h3,h4,h5,h6 {
 }
 .churn-rate-label span { font-size: 0.6rem; color: var(--text-muted); font-weight: 400; }
 
-/* ── RESPONSIVE ──────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — Full Breakpoint Coverage
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤992px) ─────────────────────────────────────── */
+@media (max-width: 992px) {
+  .glass-card { padding: 20px; }
+  .stat-card  { padding: 18px; gap: 14px; }
+  .stat-icon  { width: 44px; height: 44px; font-size: 1.1rem; }
+  .stat-value { font-size: 1.7rem; }
+  .btn-glow   { padding: 12px 24px; font-size: 0.95rem; }
+  .graph-content { min-height: 220px; }
+  .upload-zone   { padding: 36px 20px; }
+}
+
+/* ── Mobile (≤768px) ─────────────────────────────────────── */
 @media (max-width: 768px) {
-  .hero-card { padding: 36px 24px; }
-  .hero-title { font-size: 1.7rem; }
-  .stat-value { font-size: 1.6rem; }
-  .graph-card-header { font-size: 0.82rem; }
+
+  /* Navbar */
+  .topnav { padding: 10px 0; }
+  .topnav .brand { font-size: 1.05rem; }
+  .brand-icon { width: 30px; height: 30px; font-size: 13px; }
+  .btn-nav-back { padding: 6px 12px; font-size: 0.8rem; }
+  .topnav .d-flex > div:last-child { display: none; } /* hide subtitle */
+
+  /* Tab bar — icon only on small screens */
+  .tab-bar { top: 50px; }
+  .tab-btn { padding: 10px 12px; gap: 0; }
+  .tab-label { display: none; }
+  .tab-btn i { font-size: 1rem; }
+  .tab-btn.active i { color: var(--primary-light); }
+
+  /* Panel */
+  .tab-panel { padding: 20px 0 50px; }
+  .panel-title { font-size: 1.25rem; }
+  .panel-sub   { font-size: 0.82rem; margin-bottom: 18px; }
+
+  /* Stat cards */
+  .stat-card  { padding: 14px; gap: 12px; border-radius: 12px; }
+  .stat-icon  { width: 40px; height: 40px; font-size: 1rem; border-radius: 10px; }
+  .stat-value { font-size: 1.5rem; }
+  .stat-label { font-size: 0.75rem; }
+
+  /* Glass cards */
+  .glass-card { padding: 16px; border-radius: 16px; }
+  .glass-card:hover { transform: none; } /* disable hover lift on touch */
+
+  /* Buttons */
+  .btn-glow { padding: 12px 20px; font-size: 0.9rem; border-radius: 10px; }
+
+  /* Upload zone */
+  .upload-zone { padding: 28px 16px; }
+  .upload-icon-wrap { width: 60px; height: 60px; font-size: 1.5rem; margin-bottom: 14px; }
+
+  /* Index page header */
+  .hero-title { font-size: 1.8rem !important; }
+
+  /* Graph cards */
+  .graph-card:hover { transform: none; }
+  .graph-header { padding: 14px 16px; }
+  .graph-title  { font-size: 0.9rem; }
+  .graph-subtitle { font-size: 0.72rem; }
+  .graph-content { padding: 12px; min-height: 180px; }
+  .graph-icon { width: 34px; height: 34px; font-size: 0.9rem; }
+
+  /* Model cards — full width on mobile */
+  .model-card .metrics-grid { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .model-card .confusion-grid { gap: 3px; }
+
+  /* Prediction table — compact */
+  .pred-table th { padding: 10px 10px; font-size: 0.68rem; }
+  .pred-table td { padding: 10px 10px; font-size: 0.82rem; }
+  .table-scroll  { max-height: 420px; }
+  .search-box    { max-width: 100%; font-size: 0.82rem; padding: 8px 12px; }
+
+  /* Predictions filter row — stack vertically */
+  .chip-bar { gap: 6px; }
+  .chip     { padding: 5px 12px; font-size: 0.75rem; }
+
+  /* Insight cards */
+  .insight-card { padding: 14px 16px; gap: 12px; }
+  .insight-icon { width: 36px; height: 36px; font-size: 0.85rem; }
+  .insight-title { font-size: 0.82rem; }
+  .insight-value { font-size: 0.95rem; }
+
+  /* Insight stat cards */
+  .insight-stat-card { padding: 18px 14px; }
+  .insight-stat-card:hover { transform: none; }
+  .stat-icon-wrapper { width: 46px; height: 46px; font-size: 1.1rem; margin-bottom: 12px; }
+  .stat-content .stat-value { font-size: 1.8rem; }
+
+  /* Modal */
+  .ins-modal { padding: 24px 20px; border-radius: 16px; }
+
+  /* Quick nav */
+  .qnav { padding: 16px 12px; }
+  .qnav:hover { transform: none; }
+
+  /* Business impact values */
+  .glass-card [style*="font-size:2.4rem"] { font-size: 1.8rem !important; }
+  .glass-card [style*="font-size:3.5rem"] { font-size: 2.5rem !important; }
+
+  /* What-If sliders */
+  #chargesSlider, #tenureSlider { height: 6px; }
+
+  /* Toast */
+  .toast-container { bottom: 16px; right: 16px; left: 16px; }
+  .toast-msg { font-size: 0.82rem; padding: 12px 16px; }
+
+  /* Index page container padding */
+  .container { padding-left: 16px !important; padding-right: 16px !important; }
+}
+
+/* ── Small Mobile (≤480px) ───────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* Hero title */
+  .hero-title { font-size: 1.5rem !important; }
+
+  /* Tab bar — even tighter */
+  .tab-btn { padding: 10px 9px; }
+
+  /* Stat cards — 2 per row already via Bootstrap col-6, shrink further */
+  .stat-value { font-size: 1.3rem; }
+  .stat-icon  { width: 36px; height: 36px; font-size: 0.9rem; }
+  .stat-card  { padding: 12px 10px; gap: 10px; }
+
+  /* Model card accuracy number */
+  .acc-display div:first-child { font-size: 1.8rem !important; }
+
+  /* Prediction table — hide # column on tiny screens */
+  .pred-table th:first-child,
+  .pred-table td:first-child { display: none; }
+
+  /* Prediction table probability bar — shorter */
+  .pred-table td .d-flex > div:first-child { min-width: 40px; }
+
+  /* Business impact cards font */
+  .glass-card [style*="font-size:2.4rem"] { font-size: 1.5rem !important; }
+
+  /* What-If result probability */
+  #churnProbValue { font-size: 2.2rem !important; }
+
+  /* Insight card — stack value below title on tiny screens */
+  .insight-card { flex-wrap: wrap; }
+  .insight-card > div:last-child { width: 100%; text-align: left; margin-top: 6px; }
+
+  /* Required columns grid — 1 col on tiny */
+  .glass-card [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+  /* Upload zone padding */
+  .upload-zone { padding: 22px 12px; }
+  .upload-icon-wrap { width: 52px; height: 52px; font-size: 1.3rem; }
+
+  /* Sample dataset cards — full width */
+  .glass-card .btn-glow { font-size: 0.8rem; padding: 8px 14px; }
 }

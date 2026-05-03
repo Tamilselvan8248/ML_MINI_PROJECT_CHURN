@@ -122,12 +122,12 @@
 <!-- TAB BAR -->
 <div class="tab-bar">
   <div class="container">
-    <button class="tab-btn active" onclick="switchTab('overview',this)"><i class="fa-solid fa-gauge-high"></i> Overview</button>
-    <button class="tab-btn" onclick="switchTab('graphs',this)"><i class="fa-solid fa-chart-area"></i> Graphs</button>
-    <button class="tab-btn" onclick="switchTab('business',this)"><i class="fa-solid fa-dollar-sign"></i> Business Impact</button>
-    <button class="tab-btn" onclick="switchTab('whatif',this)"><i class="fa-solid fa-wand-magic-sparkles"></i> What-If</button>
-    <button class="tab-btn" onclick="switchTab('predictions',this)"><i class="fa-solid fa-table-list"></i> Predictions</button>
-    <button class="tab-btn" onclick="switchTab('insights',this)"><i class="fa-solid fa-lightbulb"></i> Insights</button>
+    <button class="tab-btn active" onclick="switchTab('overview',this)"><i class="fa-solid fa-gauge-high"></i><span class="tab-label"> Overview</span></button>
+    <button class="tab-btn" onclick="switchTab('graphs',this)"><i class="fa-solid fa-chart-area"></i><span class="tab-label"> Graphs</span></button>
+    <button class="tab-btn" onclick="switchTab('business',this)"><i class="fa-solid fa-dollar-sign"></i><span class="tab-label"> Business</span></button>
+    <button class="tab-btn" onclick="switchTab('whatif',this)"><i class="fa-solid fa-wand-magic-sparkles"></i><span class="tab-label"> What-If</span></button>
+    <button class="tab-btn" onclick="switchTab('predictions',this)"><i class="fa-solid fa-table-list"></i><span class="tab-label"> Predictions</span></button>
+    <button class="tab-btn" onclick="switchTab('insights',this)"><i class="fa-solid fa-lightbulb"></i><span class="tab-label"> Insights</span></button>
   </div>
 </div>
 
@@ -405,21 +405,20 @@
   <h2 class="panel-title mt-4">Churn <span class="gradient-text">Predictions</span></h2>
   <p class="panel-sub">Filter by risk level or switch between models to compare</p>
 
-  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+  <div class="d-flex flex-column flex-sm-row flex-wrap align-items-start align-items-sm-center justify-content-between gap-2 mb-3">
     <div class="chip-bar" style="margin-bottom:0">
       <button class="chip active" onclick="filterRisk('All',this)">All</button>
       <button class="chip high"   onclick="filterRisk('High',this)"><i class="fa-solid fa-fire-flame-curved me-1"></i>High</button>
       <button class="chip medium" onclick="filterRisk('Medium',this)"><i class="fa-solid fa-minus me-1"></i>Medium</button>
       <button class="chip low"    onclick="filterRisk('Low',this)"><i class="fa-solid fa-check me-1"></i>Low</button>
     </div>
-    <div class="d-flex align-items-center gap-2">
-      <span style="color:var(--text-muted);font-size:.82rem">Model:</span>
-      <select class="model-select model-switcher-select" id="modelSelect" onchange="switchModel(this.value)">
+    <div class="d-flex flex-wrap align-items-center gap-2" style="width:100%; max-width:420px">
+      <select class="model-select model-switcher-select flex-shrink-0" id="modelSelect" onchange="switchModel(this.value)">
         {% for name in data.model_names %}
         <option value="{{ name }}" {% if name==data.best_name %}selected{% endif %}>{{ name }}{% if name==data.best_name %} ★{% endif %}</option>
         {% endfor %}
       </select>
-      <input class="search-box" type="text" id="searchBox" placeholder="🔍 Search ID..." oninput="applyFilters()">
+      <input class="search-box" type="text" id="searchBox" placeholder="Search ID..." oninput="applyFilters()" style="flex:1; min-width:120px; max-width:100%">
     </div>
   </div>
 
