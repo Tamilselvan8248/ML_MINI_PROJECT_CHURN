@@ -102,8 +102,7 @@ def upload():
             'all_model_preds_json': json.dumps(all_model_preds),
             'segments_json':    json.dumps(segments),
         }
-        # ── Persist to Supabase ──────────────────────────
-        sid = _sid()
+        # ── Persist to Supabase (non-blocking — errors won't crash the app)
         save_analysis(sid, _store[sid])
         save_predictions(sid, best_preds)
 

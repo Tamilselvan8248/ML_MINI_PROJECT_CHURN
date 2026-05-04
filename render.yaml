@@ -3,7 +3,7 @@ services:
     name: churnguard-ai
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --workers 2 --threads 2 --timeout 120 --bind 0.0.0.0:$PORT
+    startCommand: gunicorn app:app --workers 1 --threads 4 --timeout 300 --bind 0.0.0.0:$PORT
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -11,3 +11,7 @@ services:
         value: false
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: SUPABASE_URL
+        value: https://yulygbawzddqamwmjnjd.supabase.co
+      - key: SUPABASE_KEY
+        sync: false
